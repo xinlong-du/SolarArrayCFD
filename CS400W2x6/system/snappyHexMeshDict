@@ -16,7 +16,7 @@ FoamFile
 // Which of the steps to run
 castellatedMesh true;
 snap            true;
-addLayers       false;
+addLayers       true;
 
 
 // Geometry. Definition of all surfaces. All surfaces are of class
@@ -32,14 +32,14 @@ geometry
         type triSurfaceMesh;
         file "cylinder.stl";
     }
-/*
+
     refinementBox
     {
         type searchableBox;
-        min (-1.0 -0.7 0.0);
-        max ( 8.0  0.7 2.5);
+        min (14.0 -0.7 14.0);
+        max (21.0  4.0 23.0);
     }
-*/
+
 };
 
 
@@ -92,7 +92,7 @@ castellatedMeshControls
     (
         {
             file "cylinder.eMesh";
-            level 0;
+            level 6;
         }
     );
 
@@ -112,7 +112,7 @@ castellatedMeshControls
         cylinder
         {
             // Surface-wise min and max refinement level
-            level (2 2);
+            level (5 6);
 
             // Optional specification of patch type (default is wall). No
             // constraint types (cyclic, symmetry) etc. are allowed.
@@ -159,7 +159,7 @@ castellatedMeshControls
     // section reachable from the locationInMesh is kept.
     // NOTE: This point should never be on a face, always inside a cell, even
     // after refinement.
-    locationInMesh (0.5 0.5 0.5);
+    locationInMesh (3.0001 3.0001 0.43);
 
 
     // Whether any faceZones (as specified in the refinementSurfaces)
@@ -218,7 +218,10 @@ addLayersControls
     // Per final patch (so not geometry!) the layer information
     layers
     {
-
+	"(lowerWall|cylinder).*"
+        {
+            nSurfaceLayers 1;
+        }
     }
 
     // Expansion factor for layer mesh

@@ -21,7 +21,7 @@ includedAngle       150;
 subsetFeatures
 {
     // Keep nonManifold edges (edges with >2 connected faces)
-    nonManifoldEdges       yes;
+    nonManifoldEdges       no;
 
     // Keep open edges (edges with 1 connected face)
     openEdges       yes;
