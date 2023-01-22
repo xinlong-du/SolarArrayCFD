@@ -30,15 +30,15 @@ geometry
     motorBike
     {
         type triSurfaceMesh;
-        file "motorBike.obj";
+        file "motorBike.stl";
     }
 
     // Analytical shape; cylinder, sphere
     refinementBox
     {
         type searchableBox;
-        min (-1.0 -0.7 0.0);
-        max ( 8.0  0.7 2.5);
+        min (14.0 -0.7 14.0);
+        max (21.0  4.0 23.0);
     }
 };
 
@@ -151,7 +151,7 @@ castellatedMeshControls
     // section reachable from the locationInMesh is kept.
     // NOTE: This point should never be on a face, always inside a cell, even
     // after refinement.
-    locationInMesh (3 3 0.43);
+    locationInMesh (3.0001 3.0001 0.43);
 
 
     // Whether any faceZones (as specified in the refinementSurfaces)
