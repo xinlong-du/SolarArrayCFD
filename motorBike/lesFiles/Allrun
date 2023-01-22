@@ -8,7 +8,7 @@ cp ../lesFiles/fvS* ../lesFiles/controlDict system/
 cp ../lesFiles/momentumTransport constant/
 
 ls -d processor* | xargs -I {} rm -rf ./{}/0
-ls -d processor* | xargs -I {} mv ./{}/500 ./{}/0
+ls -d processor* | xargs -I {} mv ./{}/5 ./{}/0
 ls -d processor* | xargs -I {} rm -rf ./{}/0/uniform
 
 runParallel pisoFoam
