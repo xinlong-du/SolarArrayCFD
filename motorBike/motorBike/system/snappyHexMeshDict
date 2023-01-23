@@ -112,7 +112,7 @@ castellatedMeshControls
         motorBike
         {
             // Surface-wise min and max refinement level
-            level (6 8);
+            level (5 7);
         }
     }
 

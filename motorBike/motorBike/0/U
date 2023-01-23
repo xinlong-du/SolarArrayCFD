@@ -44,7 +44,7 @@ boundaryField
         type            fixedValue;
         value           uniform (20 0 0);
     }
-    "motorBike_.*"
+    "motorBike.*"
     {
         type            noSlip;
     }
