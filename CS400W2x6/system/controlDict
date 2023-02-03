@@ -21,13 +21,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         10;
+endTime         503;
 
 deltaT          1;
 
 writeControl    timeStep;
 
-writeInterval   1;
+writeInterval   100;
 
 purgeWrite      0;
 
@@ -48,6 +48,42 @@ functions
     #include "streamlines"
     #include "cuttingPlane"
     #include "forceCoeffs"
+
+    calcMeshFactorForLES
+    {
+        libs        ("libutilityFunctionObjects.so");
+        type coded;
+        name calculateFactorForLESField;
+        codeWrite
+        #{
+            // get turbulent kinetic energy
+            const volScalarField& k  =  mesh().lookupObject<volScalarField>("k");
+            // get energy dissipation rate
+            const volScalarField& eps  = mesh().lookupObject<volScalarField>("omega");
+            //
+            auto integralLengthScale = Foam::pow(k, 1.0 / 2.0) / eps / 0.09;
+            //
+            //Info<<mesh().thisDb()<<endl; //print all objects to the terminal
+            const scalarField& volume  = mesh().V(); // Cell volume
+            auto myFactor = integralLengthScale / Foam::pow(volume, 1.0 / 3.0);
+
+            volScalarField approxCellSizeForLESFactor
+            (
+                IOobject
+                (
+                    "approxCellSizeForLESFactor",
+                    time_.timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                mesh(),
+                dimensionedScalar("approxCellSizeForLESFactor", dimless, scalar(0.0))
+            );
+            approxCellSizeForLESFactor.primitiveFieldRef() = myFactor;
+            approxCellSizeForLESFactor().write();
+        #};
+    }
 }
 
 
