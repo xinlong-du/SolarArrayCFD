@@ -56,7 +56,7 @@ cp ../lesFiles/momentumTransport constant/
 rm -r 0
 rm -r 1
 rm -r 2
-mv ./503 ./0
+mv ./502 ./0
 decomposePar >log.decomposePar
 ibrun pisoFoam -parallel >log.pisoFoam
 reconstructPar >log.reconstructPar
