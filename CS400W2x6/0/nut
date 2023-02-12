@@ -53,7 +53,7 @@ boundaryField
         value           uniform 0;
     }
 
-    cylinderGroup
+    "motorBike.*"
     {
         type            nutkWallFunction;
         value           uniform 0;
