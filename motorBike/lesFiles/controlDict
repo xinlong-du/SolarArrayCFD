@@ -21,7 +21,7 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         7.0;
+endTime         0.7;
 
 deltaT          1e-4;
 
@@ -61,6 +61,23 @@ functions
         objects
         (
             SpalartAllmarasDDES:LESRegion
+        );
+    }
+    
+    fieldAverage1
+    {
+        type            fieldAverage;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    writeTime;
+ 
+        fields
+        (
+            U
+            {
+                mean        on;
+                prime2Mean  on;
+                base        time;
+            }
         );
     }
 

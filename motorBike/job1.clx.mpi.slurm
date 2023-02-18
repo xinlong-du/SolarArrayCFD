@@ -28,7 +28,7 @@
 #SBATCH -e Tower1.e%j         # Name of stderr error file
 #SBATCH -p small                   # Queue (partition) name
 #SBATCH -N 1                       # Total # of nodes 
-#SBATCH -n 8                       # Total # of mpi tasks
+#SBATCH -n 55                      # Total # of mpi tasks
 #SBATCH -t 24:00:00                # Run time (hh:mm:ss)
 #SBATCH --mail-type=all            # Send email at begin and end of job
 #SBATCH -A DesignSafe-Hajjar       # Project/Allocation name (req'd if you have more than 1)
