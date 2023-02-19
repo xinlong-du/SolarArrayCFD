@@ -53,6 +53,7 @@ functions
     {
         libs        ("libutilityFunctionObjects.so");
         type coded;
+        writeControl writeTime
         name calculateFactorForLESField;
         codeWrite
         #{

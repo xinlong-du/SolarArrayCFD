@@ -18,7 +18,7 @@ simulationType  LES;
 
 LES
 {
-    model               SpalartAllmarasDDES;
+    model               kOmegaSSTDES;
 
     delta               cubeRootVol;
 

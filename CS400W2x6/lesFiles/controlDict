@@ -42,14 +42,15 @@ timeFormat      general;
 timePrecision   6;
 
 runTimeModifiable true;
-
+/*
 cacheTemporaryObjects
 (
     SpalartAllmarasDDES:LESRegion
 );
-
+*/
 functions
 {
+/*
     writeCachedObjects
     {
         type        writeObjects;
@@ -63,7 +64,7 @@ functions
             SpalartAllmarasDDES:LESRegion
         );
     }
-    
+*/    
     fieldAverage1
     {
         type            fieldAverage;
