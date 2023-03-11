@@ -26,10 +26,10 @@
 #SBATCH -J Tower1             # Job name
 #SBATCH -o Tower1.o%j         # Name of stdout output file
 #SBATCH -e Tower1.e%j         # Name of stderr error file
-#SBATCH -p small                   # Queue (partition) name
-#SBATCH -N 1                       # Total # of nodes 
-#SBATCH -n 8                       # Total # of mpi tasks
-#SBATCH -t 48:00:00                # Run time (hh:mm:ss)
+#SBATCH -p normal                  # Queue (partition) name
+#SBATCH -N 4                       # Total # of nodes 
+#SBATCH -n 220                     # Total # of mpi tasks
+#SBATCH -t 24:00:00                # Run time (hh:mm:ss)
 #SBATCH --mail-type=all            # Send email at begin and end of job
 #SBATCH -A DesignSafe-Hajjar       # Project/Allocation name (req'd if you have more than 1)
 #SBATCH --mail-user=du.xinl@northeastern.edu
