@@ -25,5 +25,6 @@ xTap=xRef+dx;
 yTap=yRef+dy;
 zTap=zRef+dz;
 xyzTap=[xTap,yTap,zTap];
-%scatter3(xTap,zTap,yTap)
+figure
+scatter3(xTap,zTap,yTap)
 end
