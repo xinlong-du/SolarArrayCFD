@@ -7,6 +7,37 @@ level2 = info.Groups(1);
 data = h5read(filename,'/WindDir_0deg/Row7');
 dtNorm = h5read(filename,'/WindDir_0deg/dtNorm');
 
+%% frequency analysis
+L=4.29895;
+U=18;
+dt=dtNorm*L/mean(U);
+Fs=1/dt;
+Cp=data(1,:);
+nfftS=1024; % number of Fourier Points (resolution)
+% Suu: ONE-SIDED PSD
+% n: frequency, Hz
+[Su1,n1]=periodogram(Cp,[],'onesided',nfftS,Fs);
+
+NBlock = 2; % number of blocks
+N=length(Cp);
+Ncoh = round(N/NBlock); % number of data point per block
+[Su2,n2]=pwelch(Cp,Ncoh,round(Ncoh/2),Ncoh,Fs);
+
+% Plotting PSD data on log-log axes
+figure
+loglog(n1,Su1)
+hold on
+loglog(n2,Su2)
+
+% fft
+Y=fft(Cp);
+n = length(Cp);          % number of samples
+f = (0:n-1)*(Fs/n);     % frequency range
+power = abs(Y).^2/n;    % power of the DFT
+figure
+loglog(f,power)
+xlabel('Frequency')
+ylabel('Power')
 %% CFD data
 tap1Top = readtable('tilt_n30Azim0Row7Tap1Top.csv');
 tap1Bot = readtable('tilt_n30Azim0Row7Tap1Bot.csv');
