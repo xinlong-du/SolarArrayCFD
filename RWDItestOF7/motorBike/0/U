@@ -15,7 +15,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-flowVelocity    (20 0 0);
+flowVelocity    (0 0 0);
 
 pressure        0;
 
@@ -25,25 +25,34 @@ turbulentOmega  1.78;
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (20 0 0);
+internalField   uniform (0 0 0);
 
 boundaryField
 {
     inlet
     {
-        type            fixedValue;
-        value           uniform (20 0 0);
+        type            turbulentDFMInlet;
+        filterType      exponential;
+        filterFactor    4;
+        gridFactor      1;
+        value           $internalField;
+        periodicInZ     false;
+        periodicInY     false;
+        cleanRestart    false;
+        calculateU      true;
+        calculateL      true;
+        calculateR      true;
     }
     outlet
     {
         type            inletOutlet;
         inletValue      uniform (0 0 0);
-        value           uniform (20 0 0);
+        value           uniform (0 0 0);
     }
     lowerWall
     {
         type            fixedValue;
-        value           uniform (20 0 0);
+        value           uniform (0 0 0);
     }
     "motorBike.*"
     {

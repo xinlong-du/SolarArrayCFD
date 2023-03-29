@@ -10,45 +10,36 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      controlDict;
+    location    "constant";
+    object      inflowProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-libs            ("libturbulentInflow.so");
-application     pisoFoam;
 
-startFrom       startTime;
+Naxis				(0 0 0);
+offset				(0 0 0);
 
-startTime       0;
-
-stopAt          endTime;
-
-endTime         0.7;
-
-deltaT          1e-4;
-
-writeControl    timeStep;
-
-writeInterval   1000;
-
-purgeWrite      0;
-
-writeFormat     binary;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
-
-functions
+UDict
 {
-    #include "cuttingPlane"
-    #include "streamLines"
-    #include "forceCoeffs"
+	referenceValue		11.7;
+	profile			exponential;
+	referenceAngl		0;
+	referenceDist		0.2;
+	alpha			0.2;
 }
 
+RDict
+{
+	referenceValue		(8.5556 0 0 2.5881 0 5.2052);
+	profile			exponential;
+	referenceAngl		0;
+	referenceDist		0.2;
+	alpha			(-0.1 -0.1 -0.1);
+}
+
+LDict
+{
+	referenceValue		(0.2 0.1 0.1 0.2 0.1 0.1 0.2 0.1 0.1);
+	profile			uniform;
+	Gamma			(1 1 1);
+}
 // ************************************************************************* //

@@ -14,7 +14,7 @@ FoamFile
     object      controlDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
+libs            ("libturbulentInflow.so");
 application     simpleFoam;
 
 startFrom       startTime;
