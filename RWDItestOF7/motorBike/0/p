@@ -34,7 +34,7 @@ boundaryField
     {
         type            zeroGradient;
     }
-    "motorBike_.*"
+    "motorBike.*"
     {
         type            zeroGradient;
     }

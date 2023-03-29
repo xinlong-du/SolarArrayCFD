@@ -46,7 +46,7 @@ boundaryField
         type            symmetryPlane;
         value           uniform 0;
     }
-    "motorBike_.*"
+    "motorBike.*"
     {
         type            nutUSpaldingWallFunction;
         value           uniform 0;
