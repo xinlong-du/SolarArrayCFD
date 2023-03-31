@@ -29,11 +29,11 @@ UDict
 
 RDict
 {
-	referenceValue		(0.3236 0 0 0.1869 0 0.0768); //(R11 R21 R31 R22 R32 R33)
+	referenceValue		(0.3236 0 0 0.2134 0 0.1210); //(R11 R21 R31 R22 R32 R33)
 	profile			exponential;
 	referenceAngl		0;
-	referenceDist		0.0716;
-	alpha			(-0.1998 -0.0585 -0.2717);
+	referenceDist		0.0740;
+	alpha			(-0.2112 -0.2112 -0.2112);
 }
 
 LDict

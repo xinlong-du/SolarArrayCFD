@@ -48,39 +48,40 @@ ylabel('z/L')
 xlim([0.5,1.4])
 ylim([0.0,4.0])
 %% RDict
+ZrefI=0.62*L;
+ZdZrefI=ZdL/0.62;
+X=log(ZdZrefI);
 IudIuref=Iu/Iu(1);
 Y=log(IudIuref);
-alphaIu=(X'*X)\(X'*Y);
+alphaI=(X'*X)\(X'*Y);
 
-IvdIvref=Iv/Iv(1);
-Y=log(IvdIvref);
-alphaIv=(X'*X)\(X'*Y);
+Y=log(Iv);
+Ivref=exp(mean(Y-alphaI*X));
 
-IwdIwref=Iw/Iw(1);
-Y=log(IwdIwref);
-alphaIw=(X'*X)\(X'*Y);
+Y=log(Iw);
+Iwref=exp(mean(Y-alphaI*X));
 
 figure
 plot(Iu,ZdL,'bo','LineWidth',1)
 hold on
 plot(Iv,ZdL,'rsquare','LineWidth',1)
 plot(Iw,ZdL,'gv','LineWidth',1)
-plot(Iu(1)*(y/0.6).^alphaIu,y,'k','LineWidth',1)
-plot(Iv(1)*(y/0.6).^alphaIv,y,'r','LineWidth',1)
-plot(Iw(1)*(y/0.6).^alphaIw,y,'g','LineWidth',1)
-legend('Measured Iu','Measured Iv','Measured Iw','Iu*(Z/Zref)^{-0.2186}','Iv*(Z/Zref)^{-0.1479}','Iw*(Z/Zref)^{0.0172}')
+plot(Iu(1)*(y/0.62).^alphaI,y,'k','LineWidth',1)
+plot(Ivref*(y/0.62).^alphaI,y,'r','LineWidth',1)
+plot(Iwref*(y/0.62).^alphaI,y,'g','LineWidth',1)
+legend('Measured Iu','Measured Iv','Measured Iw','Iuref*(Z/Zref)^{-0.2243}','Ivref*(Z/Zref)^{-0.2243}','Iwref*(Z/Zref)^{-0.2243}')
 legend('Location','Northwest')
-xlabel('U/Uref')
+xlabel('Turbulence Intensity')
 ylabel('z/L')
 xlim([0.0,0.25])
 ylim([0.0,4.0])
 
 RuuRef=(Iu(1)*Uref)^2;
-RvvRef=(Iv(1)*Uref)^2;
-RwwRef=(Iw(1)*Uref)^2;
-alphaRuu=2*(alphaIu+alphaU);
-alphaRvv=2*(alphaIv+alphaU);
-alphaRww=2*(alphaIw+alphaU);
+RvvRef=(Ivref*Uref)^2;
+RwwRef=(Iwref*Uref)^2;
+alphaRuu=2*(alphaI+alphaU);
+alphaRvv=2*(alphaI+alphaU);
+alphaRww=2*(alphaI+alphaU);
 %% LDict
 meanxLu=mean(xLudL)*L; %unit: m
 meanxLv=mean(xLvdL)*L;
