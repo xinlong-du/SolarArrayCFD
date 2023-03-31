@@ -1,7 +1,7 @@
 close all; clear; clc;
-L=4.29895;    %chord length
+L=4.29895/36;    %chord length
 Zref=0.6*L;   %referenceDist
-Uref=3;       %referenceValue
+Uref=3;       %referenceValue 18/6=3m/s
 windProfile=readtable('../../../RWDI/Inflow/windProfile.txt');
 ZdL=windProfile.z_L_c;
 UdUref=windProfile.U_U_ref;
@@ -75,6 +75,12 @@ ylabel('z/L')
 xlim([0.0,0.25])
 ylim([0.0,4.0])
 
+RuuRef=(Iu(1)*Uref)^2;
+RvvRef=(Iv(1)*Uref)^2;
+RwwRef=(Iw(1)*Uref)^2;
+alphaRuu=2*(alphaIu+alphaU);
+alphaRvv=2*(alphaIv+alphaU);
+alphaRww=2*(alphaIw+alphaU);
 %% LDict
 meanxLu=mean(xLudL)*L; %unit: m
 meanxLv=mean(xLvdL)*L;
