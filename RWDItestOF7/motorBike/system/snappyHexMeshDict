@@ -17,7 +17,7 @@ FoamFile
 // Which of the steps to run
 castellatedMesh true;
 snap            true;
-addLayers       false;
+addLayers       true;
 
 
 // Geometry. Definition of all surfaces. All surfaces are of class
@@ -35,11 +35,26 @@ geometry
     }
 
     // Analytical shape; cylinder, sphere
-    refinementBox
+    refinementBoxLarge
+    {
+        type searchableBox;
+        min (0.0      1.487212 -0.1);
+        max (2.656486 3.447788  0.407455);
+    }
+
+    refinementBoxMedium
     {
         type searchableBox;
         min (0.305592 1.589076 -0.1);
         max (2.554622 3.345924  0.305592);
+    }
+
+    refinementBoxSmall
+    {
+        type searchableBox;
+        min (0.407455 1.69094  -0.1);
+        max (2.452758 3.24406   0.203728);
+        name
     }
 };
 
@@ -113,7 +128,7 @@ castellatedMeshControls
         motorBike
         {
             // Surface-wise min and max refinement level
-            level (4 6);
+            level (4 4);
         }
     }
 
@@ -136,10 +151,22 @@ castellatedMeshControls
 
     refinementRegions
     {
-        refinementBox
+        refinementBoxLarge
         {
             mode inside;
-            levels ((1E15 5));
+            levels ((1E15 1));
+        }
+
+        refinementBoxMedium
+        {
+            mode inside;
+            levels ((1E15 2));
+        }
+
+        refinementBoxSmall
+        {
+            mode inside;
+            levels ((1E15 3));
         }
     }
 
@@ -197,7 +224,7 @@ addLayersControls
     {
         "(lowerWall|motorBike).*"
         {
-            nSurfaceLayers 1;
+            nSurfaceLayers 5;
         }
     }
 
