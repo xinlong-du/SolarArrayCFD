@@ -251,7 +251,7 @@ addLayersControls
 
     // When not to extrude surface. 0 is flat surface, 90 is when two faces
     // are perpendicular
-    featureAngle 60;
+    featureAngle 130;
 
     // Maximum number of snapping relaxation iterations. Should stop
     // before upon reaching a correct mesh.
