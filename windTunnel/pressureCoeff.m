@@ -8,17 +8,17 @@ data = h5read(filename,'/WindDir_0deg/Row7');
 dtNorm = h5read(filename,'/WindDir_0deg/dtNorm');
 
 %% frequency analysis
-L=4.29895;
-U=18;
-dt=dtNorm*L/mean(U);
+L=4.29895/30;
+U=9;
+dt=dtNorm*L/U;
 Fs=1/dt;
 Cp=data(1,:);
-nfftS=1024; % number of Fourier Points (resolution)
+nfftS=1024*16; % number of Fourier Points (resolution)
 % Suu: ONE-SIDED PSD
 % n: frequency, Hz
 [Su1,n1]=periodogram(Cp,[],'onesided',nfftS,Fs);
 
-NBlock = 2; % number of blocks
+NBlock = 3; % number of blocks
 N=length(Cp);
 Ncoh = round(N/NBlock); % number of data point per block
 [Su2,n2]=pwelch(Cp,Ncoh,round(Ncoh/2),Ncoh,Fs);
@@ -28,6 +28,9 @@ figure
 loglog(n1,Su1)
 hold on
 loglog(n2,Su2)
+legend('periodogram','pwelch')
+xlabel('Frequency')
+ylabel('Power Spectral Density')
 
 % fft
 Y=fft(Cp);
