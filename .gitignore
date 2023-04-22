@@ -4,3 +4,5 @@
 *.csv
 
 windTunnel/Data/
+
+windTunnel/Output/
