@@ -5,6 +5,7 @@ filename = '../../../RWDI/Wind Tunnel Data/tilt_n30deg.hdf5';
 info = h5info(filename);
 level2 = info.Groups(1);
 CpRWDI = h5read(filename,'/WindDir_0deg/Row7');
+CpRWDI = CpRWDI';
 dtNorm = h5read(filename,'/WindDir_0deg/dtNorm');
 
 %% CFD data
@@ -19,12 +20,47 @@ pBot=p{:,170:197};
 pNet=pTop-pBot;
 CpCFD=pNet/(0.5*U^2); %The pressure is kinematic pressure pk=ps/rho (m^2/s^2)
 
-%% compare each pressure tap
+%% compare Cp at each pressure tap and mean
 dtRWDI=dtNorm*L/U;
 for tapID=1:28
-    CpRWDItap=CpRWDI(tapID,:);
+    CpRWDItap=CpRWDI(:,tapID);
     CpCFDtap=CpCFD(:,tapID);
     comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID)
+end
+meanTapsRWDI=mean(CpRWDI,1);
+meanTapsCFD=mean(CpCFD,1);
+meanRWDI=mean(meanTapsRWDI);
+meanCFD=mean(meanTapsCFD);
+hfig=figure;
+plot(1:28,meanTapsRWDI)
+hold on
+plot(1:28,meanTapsCFD)
+legend({'RWDI','CFD'},'FontSize',8,'FontName','Times New Roman')
+xlabel('TapID','FontSize',8,'FontName','Times New Roman')
+ylabel('Mean Cp','FontSize',8,'FontName','Times New Roman')
+set(gca,'FontSize',8,'FontName','Times New Roman')
+% save figure
+figWidth=6;
+figHeight=3;
+set(hfig,'PaperUnits','inches');
+set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
+fileout=strcat('.\Output\0meanTaps.');
+print(hfig,[fileout,'tif'],'-r300','-dtiff');
+
+for tapID=1:28
+hfig=figure;
+CpRWDICFD=[CpRWDI(:,tapID);CpCFD(:,tapID)];
+g=[repmat({'RWDI'},length(CpRWDI),1);repmat({'CFD'},length(CpCFD),1)];
+boxplot(CpRWDICFD,g)
+ylabel('Cp','FontSize',8,'FontName','Times New Roman')
+set(gca,'FontSize',8,'FontName','Times New Roman')
+% save figure
+figWidth=3.5;
+figHeight=3;
+set(hfig,'PaperUnits','inches');
+set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
+fileout=strcat('.\Output\boxplotTap',num2str(tapID),'.');
+print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
 
 %% function for frequency analysis
