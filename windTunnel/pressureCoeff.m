@@ -15,9 +15,11 @@ dtCFD=0.005;  %output time step
 
 p = readtable('./Data/pCopy');
 timeCFD=p.Var1;
+% timeCFD=timeCFD(1:3000); %remove data of the first 5s
 pTop=p{:,2:29};
 pBot=p{:,170:197};
 pNet=pTop-pBot;
+% pNet=pNet(1001:end,:);   %remove data of the first 5s
 CpCFD=pNet/(0.5*U^2); %The pressure is kinematic pressure pk=ps/rho (m^2/s^2)
 
 %% compare Cp at each pressure tap and mean
@@ -29,28 +31,37 @@ for tapID=1:28
 end
 meanTapsRWDI=mean(CpRWDI,1);
 meanTapsCFD=mean(CpCFD,1);
+stdTapsRWDI=std(CpRWDI);
+stdTapsCFD=std(CpCFD);
 meanRWDI=mean(meanTapsRWDI);
 meanCFD=mean(meanTapsCFD);
 hfig=figure;
-plot(1:28,meanTapsRWDI)
+plot(1:28,meanTapsRWDI,'kx-')
 hold on
-plot(1:28,meanTapsCFD)
-legend({'RWDI','CFD'},'FontSize',8,'FontName','Times New Roman')
-xlabel('TapID','FontSize',8,'FontName','Times New Roman')
-ylabel('Mean Cp','FontSize',8,'FontName','Times New Roman')
+plot(1:28,meanTapsCFD,'rx-')
+plot(1:28,meanTapsRWDI+stdTapsRWDI,'k--')
+plot(1:28,meanTapsCFD+stdTapsRWDI,'r--')
+plot(1:28,meanTapsRWDI-stdTapsRWDI,'k--')
+plot(1:28,meanTapsCFD-stdTapsRWDI,'r--')
+% legend({'RWDI mean','CFD mean'},'FontSize',8,'FontName','Times New Roman')
+legend({'RWDI mean','CFD mean','RWDI mean+/-std','CFD mean+/-std'},'FontSize',8,'FontName','Times New Roman')
+xlabel('Tap ID','FontSize',8,'FontName','Times New Roman')
+ylabel('Cp','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
+xlim([1 28])
+xticks(1:3:28)
 % save figure
 figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Output\0meanTaps.');
+fileout=strcat('.\Output\0meanStdTaps.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 for tapID=1:28
-hfig=figure;
 CpRWDICFD=[CpRWDI(:,tapID);CpCFD(:,tapID)];
 g=[repmat({'RWDI'},length(CpRWDI),1);repmat({'CFD'},length(CpCFD),1)];
+hfig=figure;
 boxplot(CpRWDICFD,g)
 ylabel('Cp','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
