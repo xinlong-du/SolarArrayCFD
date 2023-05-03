@@ -20,25 +20,25 @@ offset				(0 0 0);
 
 UDict
 {
-	referenceValue		3.0;
+	referenceValue		9.0;
 	profile			exponential;
 	referenceAngl		0;
-	referenceDist		0.0716;
-	alpha			0.1187;
+	referenceDist		0.1003;
+	alpha			0.1349;
 }
 
 RDict
 {
-	referenceValue		(0.3236 0 0 0.2134 0 0.1210); //(R11 R21 R31 R22 R32 R33)
+	referenceValue		(2.7666 0 0 1.8222 0 1.0331); //(R11 R21 R31 R22 R32 R33)
 	profile			exponential;
 	referenceAngl		0;
-	referenceDist		0.0740;
-	alpha			(-0.2112 -0.2112 -0.2112);
+	referenceDist		0.1003;
+	alpha			(-0.1809 -0.1809 -0.1809);
 }
 
 LDict
 {
-	referenceValue		(0.4513 0 0 0.1798 0 0 0.0757 0 0); //(x1L11 x2L11 x3L11 x1L22 x2L22 x3L22 x1L33 x2L33 x3L33)
+	referenceValue		(0.5416 0 0 0.2157 0 0 0.0908 0 0); //(x1L11 x2L11 x3L11 x1L22 x2L22 x3L22 x1L33 x2L33 x3L33)
 	profile			uniform;
 	Gamma			(1 1 1);
 }
