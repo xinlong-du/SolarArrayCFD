@@ -1,69 +1,3 @@
-/*--------------------------------*- C++ -*----------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  7
-     \\/     M anipulation  |
-\*---------------------------------------------------------------------------*/
-FoamFile
-{
-    version     2.0;
-    format      ascii;
-    class       dictionary;
-    object      controlDict;
-}
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-libs            ("libturbulentInflow.so");
-application     pisoFoam;
-
-startFrom       startTime;
-
-startTime       0;
-
-stopAt          endTime;
-
-endTime         20.0;
-
-deltaT          1e-4;
-
-writeControl    timeStep;
-
-writeInterval   10000;
-
-purgeWrite      0;
-
-writeFormat     binary;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
-
-functions
-{
-    // #include "cuttingPlane"
-    // #include "streamLines"
-    // #include "forceCoeffs"
-    probes
-    {
-        type            probes;
-        libs            ("libsampling.so");
-        writeControl    timeStep;
-        writeInterval   20;
-
-        fields
-        (
-            p
-            U
-        );
-
-        probeLocations
-        (
 // row 1 pressure taps on the top of the panel
 (0.6293674996233297 3.9394467083333331 0.0603681458333333)
 (0.6603924988699890 3.9394467083333331 0.0782804375000000)
@@ -470,8 +404,3 @@ functions
 (2.3814424988699887 3.1871304583333333 0.0757674375000000)
 (2.4124674981166483 3.1871304583333333 0.0936797291666667)
 (2.4434924973633074 3.1871304583333333 0.1115920208333333)
-            
-        );
-}
-
-// ************************************************************************* //
