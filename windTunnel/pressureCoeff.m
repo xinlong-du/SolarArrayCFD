@@ -1,33 +1,53 @@
 close all; clear; clc;
+rowID=2;
 %% wind tunnel data
 filename = '../../../RWDI/Wind Tunnel Data/tilt_n30deg.hdf5';
 % h5disp(filename);
 info = h5info(filename);
 level2 = info.Groups(1);
-CpRWDI = h5read(filename,'/WindDir_0deg/Row7');
+CpRWDI = h5read(filename,strcat('/WindDir_0deg/Row',num2str(rowID)));
 CpRWDI = CpRWDI';
 dtNorm = h5read(filename,'/WindDir_0deg/dtNorm');
 
 %% CFD data
-L=4.29895/36; %chord length
-U=3;          %wind speed
-dtCFD=0.005;  %output time step
+L=4.29895/30; %chord length
+U=9;          %wind speed
+dtCFD=0.002;  %output time step
 
 p = readtable('./Data/pCopy');
 timeCFD=p.Var1;
 % timeCFD=timeCFD(1:3000); %remove data of the first 5s
-pTop=p{:,2:29};
-pBot=p{:,170:197};
+% pTop=p{:,338:365};
+% pBot=p{:,366:393};
+% pTop=p{:,2:29};
+% pBot=p{:,30:57};
+pTopSta=2+(rowID-1)*56;
+pTopEnd=2+(rowID-1)*56+27;
+pBotSta=30+(rowID-1)*56;
+pBotEnd=30+(rowID-1)*56+27;
+pTop=p{:,pTopSta:pTopEnd};
+pBot=p{:,pBotSta:pBotEnd};
 pNet=pTop-pBot;
 % pNet=pNet(1001:end,:);   %remove data of the first 5s
 CpCFD=pNet/(0.5*U^2); %The pressure is kinematic pressure pk=ps/rho (m^2/s^2)
 
 %% compare Cp at each pressure tap and mean
+% %two-sample t test to see if RWDI and CFD have the same mean
+% %h=0 for the same mean, h=1 for not the same mean
+% %this requres data in CpRWDItap is independent
+% hp=zeros(28,2);
+% for tapID=1:28
+%     CpRWDItap=CpRWDI(:,tapID);
+%     CpCFDtap=CpCFD(:,tapID);
+%     [hp(tapID,1),hp(tapID,2),ci,stats] = ttest2(CpRWDItap,CpCFDtap);
+%     %[hp(tapID,1),hp(tapID,2),ci,stats] = ttest2(CpRWDItap,CpCFDtap,'Vartype','unequal');
+% end
+
 dtRWDI=dtNorm*L/U;
 for tapID=1:28
     CpRWDItap=CpRWDI(:,tapID);
     CpCFDtap=CpCFD(:,tapID);
-    comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID)
+    comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID)
 end
 meanTapsRWDI=mean(CpRWDI,1);
 meanTapsCFD=mean(CpCFD,1);
@@ -40,9 +60,9 @@ plot(1:28,meanTapsRWDI,'kx-')
 hold on
 plot(1:28,meanTapsCFD,'rx-')
 plot(1:28,meanTapsRWDI+stdTapsRWDI,'k--')
-plot(1:28,meanTapsCFD+stdTapsRWDI,'r--')
+plot(1:28,meanTapsCFD+stdTapsCFD,'r--')
 plot(1:28,meanTapsRWDI-stdTapsRWDI,'k--')
-plot(1:28,meanTapsCFD-stdTapsRWDI,'r--')
+plot(1:28,meanTapsCFD-stdTapsCFD,'r--')
 % legend({'RWDI mean','CFD mean'},'FontSize',8,'FontName','Times New Roman')
 legend({'RWDI mean','CFD mean','RWDI mean+/-std','CFD mean+/-std'},'FontSize',8,'FontName','Times New Roman')
 xlabel('Tap ID','FontSize',8,'FontName','Times New Roman')
@@ -55,7 +75,7 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Output\0meanStdTaps.');
+fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 for tapID=1:28
@@ -70,12 +90,12 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Output\boxplotTap',num2str(tapID),'.');
+fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
 
 %% function for frequency analysis
-function comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID)
+function comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID)
 nfftS=1024*16; % number of Fourier Points (resolution)
 %RWDI
 Fs=1/dtRWDI;
@@ -99,7 +119,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Output\PSDtap',num2str(tapID),'.');
+fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % plot time series
@@ -117,6 +137,6 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Output\timeSeriesTap',num2str(tapID),'.');
+fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
