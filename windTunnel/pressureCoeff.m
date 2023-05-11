@@ -16,7 +16,7 @@ dtCFD=0.002;  %output time step
 
 p = readtable('./Data/pCopy');
 timeCFD=p.Var1;
-% timeCFD=timeCFD(1:3000); %remove data of the first 5s
+timeCFD=timeCFD(1:7500); %remove data of the first 5s
 % pTop=p{:,338:365};
 % pBot=p{:,366:393};
 % pTop=p{:,2:29};
@@ -28,7 +28,7 @@ pBotEnd=30+(rowID-1)*56+27;
 pTop=p{:,pTopSta:pTopEnd};
 pBot=p{:,pBotSta:pBotEnd};
 pNet=pTop-pBot;
-% pNet=pNet(1001:end,:);   %remove data of the first 5s
+pNet=pNet(2501:end,:);   %remove data of the first 5s
 CpCFD=pNet/(0.5*U^2); %The pressure is kinematic pressure pk=ps/rho (m^2/s^2)
 
 %% compare Cp at each pressure tap and mean
@@ -44,6 +44,8 @@ CpCFD=pNet/(0.5*U^2); %The pressure is kinematic pressure pk=ps/rho (m^2/s^2)
 % end
 
 dtRWDI=dtNorm*L/U;
+%only use 15s data from RWDI, note that dtRWDI=dtCFD
+CpRWDI=CpRWDI(length(CpRWDI)/2-7500/2+1:length(CpRWDI)/2+7500/2,:);
 for tapID=1:28
     CpRWDItap=CpRWDI(:,tapID);
     CpCFDtap=CpCFD(:,tapID);
@@ -128,6 +130,7 @@ hfig=figure;
 plot(timeRWDI,CpRWDItap(1:round(timeCFD(end)/dtRWDI)))
 hold on
 plot(timeCFD,CpCFDtap)
+xlim([0 timeCFD(end)])
 legend({'RWDI','CFD'},'FontSize',8,'FontName','Times New Roman')
 xlabel('Time (s)','FontSize',8,'FontName','Times New Roman')
 ylabel('Pressure Coefficient','FontSize',8,'FontName','Times New Roman')
