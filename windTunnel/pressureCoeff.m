@@ -80,6 +80,13 @@ set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
 fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
+%mean for a table
+meanTableRWDI=mean(CpRWDI,2);
+meanTableCFD=mean(CpCFD,2);
+stdTableRWDI=std(meanTableRWDI);
+stdTableCFD=std(meanTableCFD);
+comparePSD(dtRWDI,dtCFD,timeCFD,meanTableRWDI,meanTableCFD,999,rowID)
+
 for tapID=1:28
 CpRWDICFD=[CpRWDI(:,tapID);CpCFD(:,tapID)];
 g=[repmat({'RWDI'},length(CpRWDI),1);repmat({'CFD'},length(CpCFD),1)];
@@ -122,6 +129,24 @@ figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
 fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
+print(hfig,[fileout,'tif'],'-r300','-dtiff');
+
+% Plotting PSD data on log-log axes (1 to 20 Hz)
+hfig=figure;
+loglog(nRWDI,SuuRWDI)
+hold on
+loglog(nCFD,SuuCFD)
+xlim([1,20])
+legend({'RWDI','CFD'},'FontSize',8,'FontName','Times New Roman')
+xlabel('Frequency','FontSize',8,'FontName','Times New Roman')
+ylabel('Power Spectral Density','FontSize',8,'FontName','Times New Roman')
+set(gca,'FontSize',8,'FontName','Times New Roman')
+% save figure
+figWidth=3.5;
+figHeight=3;
+set(hfig,'PaperUnits','inches');
+set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
+fileout=strcat('.\Output\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % plot time series
