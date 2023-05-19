@@ -85,3 +85,55 @@ alphaRww=2*(alphaI+alphaU);
 meanxLu=mean(xLudL)*L; %unit: m
 meanxLv=mean(xLvdL)*L;
 meanxLw=mean(xLwdL)*L;
+
+%% output L, R, U, and points for inlet
+Z=0.984488/183:0.984488/183:0.984488;
+Z=Z';
+
+%U
+U=Uref*(Z/Zref).^alphaU;
+figure
+plot(UdUref,ZdL,'o','LineWidth',1)
+hold on
+x=0.5:0.01:1.4;                                       %U/Uref
+plot(x,exp(log(x)/alphaU)*ZrefdL,'k','LineWidth',1)   %ZrefdL is used to convert Z/Zref to Z/L
+plot(U/Uref,Z/L,'r--','LineWidth',1)
+legend('Measured','(Z/Zref)^{0.1349}','Sampling points')
+legend('Location','Northwest')
+xlabel('U/Uref')
+ylabel('z/L')
+
+%%
+Z_test=ZdL*L;
+U_test=UdUref*Uref;
+logZ=log(Z_test);
+P_fit=polyfit(logZ,U_test,1);
+a=P_fit(1);
+b=P_fit(2);
+% Finding the parameters of the log-law model from a,b
+u_star_est=a*0.4; % From best-fit expression: u<star>=a*k=a*0.4
+z0_est=exp(-b/a); % From best-fit expression: z0=exp(-b/a)
+figure
+% Plot experimental data and compare them against the model
+k=0.4; % Von-Karmann constant
+z_model=20*z0_est:0.01:Z_test(end);
+U_model=u_star_est/k*log(z_model./z0_est);
+plot(U_model,z_model,U_test,Z_test,'rx')
+title('\rmProblem 1: log-law wind speed profile')
+xlabel('Mean wind speed [m/s]')
+ylabel('Elevation [m]')
+legend('Model','Experimental data','Location','best')
+%%
+
+%R
+Ruu=RuuRef*(Z/Zref).^alphaRuu;
+Rvv=RvvRef*(Z/Zref).^alphaRvv;
+Rww=RwwRef*(Z/Zref).^alphaRww;
+Ruv=-u_star_est^2;
+figure
+plot(Ruu,Z,'r-','LineWidth',1)
+hold on
+plot(Rvv,Z,'b-','LineWidth',1)
+plot(Rww,Z,'m-','LineWidth',1)
+xlabel('Ruu')
+ylabel('Z')
