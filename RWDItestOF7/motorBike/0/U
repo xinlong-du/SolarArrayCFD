@@ -39,9 +39,9 @@ boundaryField
         periodicInZ     false;
         periodicInY     false;
         cleanRestart    false;
-        calculateU      true;
-        calculateL      true;
-        calculateR      true;
+        calculateU      false;
+        calculateL      false;
+        calculateR      false;
     }
     outlet
     {

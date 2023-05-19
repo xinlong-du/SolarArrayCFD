@@ -69,7 +69,7 @@ plot(Iuref*(y/ZrefdL).^alphaI,y,'k','LineWidth',1)
 plot(Ivref*(y/ZrefdL).^alphaI,y,'r','LineWidth',1)
 plot(Iwref*(y/ZrefdL).^alphaI,y,'g','LineWidth',1)
 legend('Measured Iu','Measured Iv','Measured Iw','Iuref*(Z/Zref)^{-0.2254}','Ivref*(Z/Zref)^{-0.2254}','Iwref*(Z/Zref)^{-0.2254}')
-legend('Location','Northwest')
+legend('Location','Northeast')
 xlabel('Turbulence Intensity')
 ylabel('z/L')
 xlim([0.0,0.25])
@@ -82,12 +82,19 @@ alphaRuu=2*(alphaI+alphaU);
 alphaRvv=2*(alphaI+alphaU);
 alphaRww=2*(alphaI+alphaU);
 %% LDict
-meanxLu=mean(xLudL)*L; %unit: m
-meanxLv=mean(xLvdL)*L;
-meanxLw=mean(xLwdL)*L;
+xLu=mean(xLudL)*L; %unit: m
+yLu=0.27*xLu;
+zLu=0.28*xLu;
+xLv=mean(xLvdL)*L;
+yLv=0.06*xLu;
+zLv=0.07*xLu;
+xLw=mean(xLwdL)*L;
+yLw=0.14*xLu;
+zLw=0.32*xLu;
 
 %% output L, R, U, and points for inlet
-Z=0.984488/183:0.984488/183:0.984488;
+nPoints=183;
+Z=0.984488/nPoints:0.984488/nPoints:0.984488;
 Z=Z';
 
 %U
@@ -103,7 +110,7 @@ legend('Location','Northwest')
 xlabel('U/Uref')
 ylabel('z/L')
 
-%%
+%Calculate u_star
 Z_test=ZdL*L;
 U_test=UdUref*Uref;
 logZ=log(Z_test);
@@ -119,11 +126,10 @@ k=0.4; % Von-Karmann constant
 z_model=20*z0_est:0.01:Z_test(end);
 U_model=u_star_est/k*log(z_model./z0_est);
 plot(U_model,z_model,U_test,Z_test,'rx')
-title('\rmProblem 1: log-law wind speed profile')
+title('\rmlog-law wind speed profile')
 xlabel('Mean wind speed [m/s]')
 ylabel('Elevation [m]')
 legend('Model','Experimental data','Location','best')
-%%
 
 %R
 Ruu=RuuRef*(Z/Zref).^alphaRuu;
@@ -135,5 +141,52 @@ plot(Ruu,Z,'r-','LineWidth',1)
 hold on
 plot(Rvv,Z,'b-','LineWidth',1)
 plot(Rww,Z,'m-','LineWidth',1)
+legend('Ruu','Rvv','Rww')
+legend('Location','Northeast')
 xlabel('Ruu')
 ylabel('Z')
+
+%% write L, R, U, and points files
+fileID=fopen('../RWDItestOF7/motorBike/constant/boundaryData/inlet/points','w');
+fprintf(fileID,'%1s\n','(');
+for i = 1:nPoints*2
+    if i<=nPoints
+        fprintf(fileID,'%1s%8.6f %8.6f %8.6f%1s\n','(',0.0,-4.0,Z(i),')');
+    else
+        fprintf(fileID,'%1s%8.6f %8.6f %8.6f%1s\n','(',0.0,4.0,Z(i-nPoints),')');
+    end
+end
+fprintf(fileID,'%1s',')');
+fclose(fileID);
+
+fileID=fopen('../RWDItestOF7/motorBike/constant/boundaryData/inlet/U','w');
+fprintf(fileID,'%1s\n','(');
+for i = 1:nPoints*2
+    if i<=nPoints
+        fprintf(fileID,'%8.6f\n',U(i));
+    else
+        fprintf(fileID,'%8.6f\n',U(i-nPoints));
+    end
+end
+fprintf(fileID,'%1s',')');
+fclose(fileID);
+
+fileID=fopen('../RWDItestOF7/motorBike/constant/boundaryData/inlet/R','w');
+fprintf(fileID,'%1s\n','(');
+for i = 1:nPoints*2
+    if i<=nPoints
+        fprintf(fileID,'%1s%8.6f %8.6f %8.6f %8.6f %8.6f %8.6f%1s\n','(',Ruu(i),Ruv,0.0,Rvv(i),0.0,Rww(i),')');
+    else
+        fprintf(fileID,'%1s%8.6f %8.6f %8.6f %8.6f %8.6f %8.6f%1s\n','(',Ruu(i-nPoints),Ruv,0.0,Rvv(i-nPoints),0.0,Rww(i-nPoints),')');
+    end
+end
+fprintf(fileID,'%1s',')');
+fclose(fileID);
+
+fileID=fopen('../RWDItestOF7/motorBike/constant/boundaryData/inlet/L','w');
+fprintf(fileID,'%1s\n','(');
+for i = 1:nPoints*2
+    fprintf(fileID,'%1s%8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f%1s\n','(',xLu,yLu,zLu,xLv,yLv,zLv,xLw,yLw,zLw,')');
+end
+fprintf(fileID,'%1s',')');
+fclose(fileID);
