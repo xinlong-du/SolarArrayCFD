@@ -1,5 +1,5 @@
 close all; clear; clc;
-rowID=2;
+rowID=7;
 %% wind tunnel data
 filename = '../../../RWDI/Wind Tunnel Data/tilt_n30deg.hdf5';
 % h5disp(filename);
@@ -21,10 +21,10 @@ timeCFD=timeCFD(1:7500); %remove data of the first 5s
 % pBot=p{:,366:393};
 % pTop=p{:,2:29};
 % pBot=p{:,30:57};
-pTopSta=2+(rowID-1)*56;
-pTopEnd=2+(rowID-1)*56+27;
-pBotSta=30+(rowID-1)*56;
-pBotEnd=30+(rowID-1)*56+27;
+pTopSta=60+2+(rowID-1)*56;
+pTopEnd=60+2+(rowID-1)*56+27;
+pBotSta=60+30+(rowID-1)*56;
+pBotEnd=60+30+(rowID-1)*56+27;
 pTop=p{:,pTopSta:pTopEnd};
 pBot=p{:,pBotSta:pBotEnd};
 pNet=pTop-pBot;
