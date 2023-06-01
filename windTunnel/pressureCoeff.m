@@ -1,5 +1,5 @@
 close all; clear; clc;
-rowID=7;
+rowID=1;
 %% wind tunnel data
 filename = '../../../RWDI/Wind Tunnel Data/tilt_n30deg.hdf5';
 % h5disp(filename);
@@ -71,6 +71,7 @@ xlabel('Tap ID','FontSize',8,'FontName','Times New Roman')
 ylabel('Cp','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
 xlim([1 28])
+ylim([-0.2 2.2])
 xticks(1:3:28)
 % save figure
 figWidth=6;
@@ -137,6 +138,7 @@ loglog(nRWDI,SuuRWDI)
 hold on
 loglog(nCFD,SuuCFD)
 xlim([1,20])
+ylim([1e-6,1])
 legend({'RWDI','CFD'},'FontSize',8,'FontName','Times New Roman')
 xlabel('Frequency','FontSize',8,'FontName','Times New Roman')
 ylabel('Power Spectral Density','FontSize',8,'FontName','Times New Roman')
