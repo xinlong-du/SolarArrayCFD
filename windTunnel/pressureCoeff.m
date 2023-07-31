@@ -1,20 +1,22 @@
 close all; clear; clc;
 rowID=7;
+dir='30';
+
 %% wind tunnel data
 filename = '../../../RWDI/Wind Tunnel Data/tilt_n30deg.hdf5';
 % h5disp(filename);
 info = h5info(filename);
 level2 = info.Groups(1);
-CpRWDI = h5read(filename,strcat('/WindDir_0deg/Row',num2str(rowID)));
+CpRWDI = h5read(filename,strcat('/WindDir_',dir,'deg/Row',num2str(rowID)));
 CpRWDI = CpRWDI';
-dtNorm = h5read(filename,'/WindDir_0deg/dtNorm');
+dtNorm = h5read(filename,strcat('/WindDir_',dir,'deg/dtNorm'));
 
 %% CFD data
 L=4.29895/30; %chord length
 U=9;          %wind speed
 dtCFD=0.002;  %output time step
-
-p = readtable('./Data/Dir0MeshMore/pCopy');
+CFDname=strcat('./Data/Dir',dir,'MeshMore/pCopy');
+p = readtable(CFDname);
 timeCFD=p.Var1;
 timeCFD=timeCFD(1:7500); %remove data of the first 5s
 % pTop=p{:,338:365};
@@ -49,7 +51,7 @@ CpRWDI=CpRWDI(length(CpRWDI)/2-7500/2+1:length(CpRWDI)/2+7500/2,:);
 for tapID=1:28
     CpRWDItap=CpRWDI(:,tapID);
     CpCFDtap=CpCFD(:,tapID);
-    comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID)
+    comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID,dir)
 end
 meanTapsRWDI=mean(CpRWDI,1);
 meanTapsCFD=mean(CpCFD,1);
@@ -78,7 +80,7 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir0MeshMore\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
+fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 %mean for a table
@@ -86,7 +88,7 @@ meanTableRWDI=mean(CpRWDI,2);
 meanTableCFD=mean(CpCFD,2);
 stdTableRWDI=std(meanTableRWDI);
 stdTableCFD=std(meanTableCFD);
-comparePSD(dtRWDI,dtCFD,timeCFD,meanTableRWDI,meanTableCFD,999,rowID)
+comparePSD(dtRWDI,dtCFD,timeCFD,meanTableRWDI,meanTableCFD,999,rowID,dir)
 
 for tapID=1:28
 CpRWDICFD=[CpRWDI(:,tapID);CpCFD(:,tapID)];
@@ -100,12 +102,12 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir0MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
+fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
 
 %% function for frequency analysis
-function comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID)
+function comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID,dir)
 nfftS=1024*16; % number of Fourier Points (resolution)
 %RWDI
 Fs=1/dtRWDI;
@@ -129,7 +131,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir0MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
+fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % Plotting PSD data on log-log axes (1 to 20 Hz)
@@ -148,7 +150,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir0MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
+fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % plot time series
@@ -167,6 +169,6 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir0MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
+fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
