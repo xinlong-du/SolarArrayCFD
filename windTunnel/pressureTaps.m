@@ -1,18 +1,16 @@
 close all; clear; clc;
 L=4.29895/30;
+twoL=0.286600; %exact in the .STL file
 tilt=30/180*pi;
-xRefTop=[0.613855;0.900455;1.187055;1.473655;1.760255;2.046855;2.333455];
-yRefTop=3.957359;
-zRefTop=0.051412;
-xRefBot=[0.615305;0.901905;1.188505;1.475105;1.761705;2.048305;2.334905];
-yRefBot=3.957359;
-zRefBot=0.048899;
+orient=0/180*pi;
+xyzRefTop=[0.613855,3.957359,0.051412];
+xyzRefBot=[0.615305,3.957359,0.048899];
 xyzTapTop=zeros(28,21);
 xyzTapBot=zeros(28,21);
 
 for i=0:6
-    xyzTapTop(:,3*i+1:3*i+3)=tapCoord(L,tilt,xRefTop(i+1),yRefTop,zRefTop);
-    xyzTapBot(:,3*i+1:3*i+3)=tapCoord(L,tilt,xRefBot(i+1),yRefBot,zRefBot);
+    xyzTapTop(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefTop);
+    xyzTapBot(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefBot);
 end
 
 figure
@@ -40,21 +38,24 @@ for i = 0:6
     end
 end
 fclose(fileID);
+
 %% function for calculating tap locations
-function xyzTap=tapCoord(L,tilt,xRef,yRef,zRef)
+function xyzTap=tapCoord(rowID,L,twoL,tilt,orient,xyzRef)
 dX=L*repmat([0.125;0.125+0.25;0.125+0.25+0.25;0.125+0.25+0.25+0.25],7,1);
-dy=-L*[repmat(0.125,4,1);...
+dy=L*[repmat(0.125,4,1);...
     repmat(0.125+0.5,4,1);...
     repmat(0.125+0.5+0.75,4,1);...
     repmat(0.125+0.5+0.75+1,4,1);...
     repmat(0.125+0.5+0.75+1+1.25,4,1);...
     repmat(0.125+0.5+0.75+1+1.25+1,4,1);...
     repmat(0.125+0.5+0.75+1+1.25+1+0.75,4,1)];
-dx=dX*cos(tilt);
+dx=dX*cos(tilt)+rowID*twoL;
 dz=dX*sin(tilt);
-xTap=xRef+dx;
-yTap=yRef+dy;
-zTap=zRef+dz;
+dxRot=dx*cos(orient)+dy*sin(orient);
+dyRot=-(dy*cos(orient)-dx*sin(orient));
+xTap=xyzRef(1)+dxRot;
+yTap=xyzRef(2)+dyRot;
+zTap=xyzRef(3)+dz;
 xyzTap=[xTap,yTap,zTap];
 figure
 scatter3(xTap,yTap,zTap)
