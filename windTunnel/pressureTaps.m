@@ -2,15 +2,19 @@ close all; clear; clc;
 L=4.29895/30;
 twoL=0.286600; %exact in the .STL file
 tilt=30/180*pi;
-orient=0/180*pi;
+orient=30/180*pi;
 xyzRefTop=[0.613855,3.957359,0.051412];
 xyzRefBot=[0.615305,3.957359,0.048899];
 xyzTapTop=zeros(28,21);
 xyzTapBot=zeros(28,21);
+xyzNoTapTop=zeros(28,21);
+xyzNoTapBot=zeros(28,21);
 
 for i=0:6
-    xyzTapTop(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefTop);
-    xyzTapBot(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefBot);
+    xyzTapTop(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefTop,1);
+    xyzTapBot(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefBot,1);
+    xyzNoTapTop(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefTop,0);
+    xyzNoTapBot(:,3*i+1:3*i+3)=tapCoord(i,L,twoL,tilt,orient,xyzRefBot,0);
 end
 
 figure
@@ -18,6 +22,8 @@ for i=0:6
     scatter3(xyzTapTop(:,3*i+1),xyzTapTop(:,3*i+2),xyzTapTop(:,3*i+3),'k.')
     hold on
     scatter3(xyzTapBot(:,3*i+1),xyzTapBot(:,3*i+2),xyzTapBot(:,3*i+3),'r.')
+    scatter3(xyzNoTapTop(:,3*i+1),xyzNoTapTop(:,3*i+2),xyzNoTapTop(:,3*i+3),'k.')
+    scatter3(xyzNoTapBot(:,3*i+1),xyzNoTapBot(:,3*i+2),xyzNoTapBot(:,3*i+3),'r.')
 end
 xlabel('X')
 ylabel('Y')
@@ -25,22 +31,55 @@ zlabel('Z')
 axis equal
 
 %% write probe locations
-fileID=fopen('probes.txt','w');
+fileID=fopen('../RWDItestOF7Dir/RWDItestOF7Dir30/motorBike/system/probes','w');
+fprintf(fileID,'%14s\n','probeLocations');
+fprintf(fileID,'%1s\n','(');
+fprintf(fileID,'%1s\n','// probes at inlet to check simulation of turbulent inflow');
+for i=1:9
+    fprintf(fileID,'    %1s%2.1f %8.6f %2.1f%1s\n','(',0.0,3.147759,i/10,')');
+end
+fprintf(fileID,'    %1s%2.1f %8.6f %4.2f%1s\n','(',0.0,3.147759,0.98,')');
+for i=1:9
+    fprintf(fileID,'    %1s%2.1f %8.6f %2.1f%1s\n','(',0.1,3.147759,i/10,')');
+end
+fprintf(fileID,'    %1s%2.1f %8.6f %4.2f%1s\n','(',0.1,3.147759,0.98,')');
+fprintf(fileID,'%1s\n','// probles incident to array');
+for i=1:9
+    fprintf(fileID,'    %1s%2.1f %8.6f %2.1f%1s\n','(',0.6,3.147759,i/10,')');
+end
+fprintf(fileID,'    %1s%2.1f %8.6f %4.2f%1s\n','(',0.6,3.147759,0.98,')');
+
+fprintf(fileID,'%1s\n','// probes at inlet to check simulation of turbulent inflow');
+for i=1:9
+    fprintf(fileID,'    %1s%2.1f %3.1f %2.1f%1s\n','(',0.0,2.7,i/10,')');
+end
+fprintf(fileID,'    %1s%2.1f %3.1f %4.2f%1s\n','(',0.0,2.7,0.98,')');
+for i=1:9
+    fprintf(fileID,'    %1s%2.1f %3.1f %2.1f%1s\n','(',0.1,2.7,i/10,')');
+end
+fprintf(fileID,'    %1s%2.1f %3.1f %4.2f%1s\n','(',0.1,2.7,0.98,')');
+fprintf(fileID,'%1s\n','// probles incident to array');
+for i=1:9
+    fprintf(fileID,'    %1s%2.1f %3.1f %2.1f%1s\n','(',0.6,2.7,i/10,')');
+end
+fprintf(fileID,'    %1s%2.1f %3.1f %4.2f%1s\n','(',0.6,2.7,0.98,')');
+
 for i = 0:6
-    fprintf(fileID,'%6s %1i %1s\n','// row',i+1,'pressure taps on the top of the panel');
+    fprintf(fileID,'%6s %1i%1s\n','// table with pressure taps, row',i+1,', top of the panel');
     for j=1:28
-        fprintf(fileID,'%1s%18.16f %18.16f %18.16f%1s\n','(',xyzTapTop(j,3*i+1:3*i+3),')');
+        fprintf(fileID,'    %1s%18.16f %18.16f %18.16f%1s\n','(',xyzTapTop(j,3*i+1:3*i+3),')');
     end
     
-    fprintf(fileID,'%6s %1i %1s\n','// row',i+1,'pressure taps on the bottom of the panel');
+    fprintf(fileID,'%6s %1i%1s\n','// table with pressure taps, row',i+1,', bottom of the panel');
     for j=1:28
-        fprintf(fileID,'%1s%18.16f %18.16f %18.16f%1s\n','(',xyzTapBot(j,3*i+1:3*i+3),')');
+        fprintf(fileID,'    %1s%18.16f %18.16f %18.16f%1s\n','(',xyzTapBot(j,3*i+1:3*i+3),')');
     end
 end
+fprintf(fileID,'%1s',');');
 fclose(fileID);
 
 %% function for calculating tap locations
-function xyzTap=tapCoord(rowID,L,twoL,tilt,orient,xyzRef)
+function xyzTap=tapCoord(rowID,L,twoL,tilt,orient,xyzRef,tapFlag)
 dX=L*repmat([0.125;0.125+0.25;0.125+0.25+0.25;0.125+0.25+0.25+0.25],7,1);
 dy=L*[repmat(0.125,4,1);...
     repmat(0.125+0.5,4,1);...
@@ -49,6 +88,9 @@ dy=L*[repmat(0.125,4,1);...
     repmat(0.125+0.5+0.75+1+1.25,4,1);...
     repmat(0.125+0.5+0.75+1+1.25+1,4,1);...
     repmat(0.125+0.5+0.75+1+1.25+1+0.75,4,1)];
+if tapFlag==0
+    dy=dy+5.8*L; %check the geometry model to see if need to use 0.1433 or twoL/2
+end
 dx=dX*cos(tilt)+rowID*twoL;
 dz=dX*sin(tilt);
 dxRot=dx*cos(orient)+dy*sin(orient);
