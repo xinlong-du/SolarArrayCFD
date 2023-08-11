@@ -2,9 +2,17 @@ close all; clear; clc;
 L=4.29895/30;
 twoL=0.286600; %exact in the .STL file
 tilt=30/180*pi;
+
+% orient=0 deg
+% orient=0/180*pi;
+% xyzRefTop=[0.613855,3.957359,0.051412];
+% xyzRefBot=[0.615305,3.957359,0.048899];
+
+% orient=30 deg
 orient=30/180*pi;
 xyzRefTop=[0.613855,3.957359,0.051412];
 xyzRefBot=[0.615305,3.957359,0.048899];
+
 xyzTapTop=zeros(28,21);
 xyzTapBot=zeros(28,21);
 xyzNoTapTop=zeros(28,21);
@@ -31,7 +39,8 @@ zlabel('Z')
 axis equal
 
 %% write probe locations
-fileID=fopen('../RWDItestOF7Dir/RWDItestOF7Dir30/motorBike/system/probes','w');
+fileName=strcat('../RWDItestOF7Dir/RWDItestOF7Dir',num2str(orient/pi*180),'/motorBike/system/probes');
+fileID=fopen(fileName,'w');
 fprintf(fileID,'%14s\n','probeLocations');
 fprintf(fileID,'%1s\n','(');
 fprintf(fileID,'%1s\n','// probes at inlet to check simulation of turbulent inflow');
@@ -75,6 +84,19 @@ for i = 0:6
         fprintf(fileID,'    %1s%18.16f %18.16f %18.16f%1s\n','(',xyzTapBot(j,3*i+1:3*i+3),')');
     end
 end
+
+for i = 0:6
+    fprintf(fileID,'%6s %1i%1s\n','// table without pressure taps, row',i+1,', top of the panel');
+    for j=1:28
+        fprintf(fileID,'    %1s%18.16f %18.16f %18.16f%1s\n','(',xyzNoTapTop(j,3*i+1:3*i+3),')');
+    end
+    
+    fprintf(fileID,'%6s %1i%1s\n','// table without pressure taps, row',i+1,', bottom of the panel');
+    for j=1:28
+        fprintf(fileID,'    %1s%18.16f %18.16f %18.16f%1s\n','(',xyzNoTapBot(j,3*i+1:3*i+3),')');
+    end
+end
+
 fprintf(fileID,'%1s',');');
 fclose(fileID);
 
