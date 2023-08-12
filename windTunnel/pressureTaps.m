@@ -10,8 +10,8 @@ tilt=30/180*pi;
 
 % orient=30 deg
 orient=30/180*pi;
-xyzRefTop=[0.613855,3.957359,0.051412];
-xyzRefBot=[0.615305,3.957359,0.048899];
+xyzRefTop=[0.615305,3.387605,0.051412]; %z=0.051411 in the .STL file
+xyzRefBot=[0.616561,3.388330,0.048899]; %z=0.0489 in the .STL file
 
 xyzTapTop=zeros(28,21);
 xyzTapBot=zeros(28,21);
@@ -111,7 +111,7 @@ dy=L*[repmat(0.125,4,1);...
     repmat(0.125+0.5+0.75+1+1.25+1,4,1);...
     repmat(0.125+0.5+0.75+1+1.25+1+0.75,4,1)];
 if tapFlag==0
-    dy=dy+5.8*L; %check the geometry model to see if need to use 0.1433 or twoL/2
+    dy=11.3*L-dy; %11.3*L=1.6192 in the geometry model
 end
 dx=dX*cos(tilt)+rowID*twoL;
 dz=dX*sin(tilt);
@@ -126,4 +126,5 @@ scatter3(xTap,yTap,zTap)
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
+axis equal
 end
