@@ -14,9 +14,14 @@ tilt=30/180*pi;
 % xyzRefBot=[0.616561,3.388330,0.048899]; %z=0.0489 in the .STL file
 
 % orient=60 deg
-orient=60/180*pi;
-xyzRefTop=[0.615305,2.753585,0.051412]; %z=0.051411 in the .STL file
-xyzRefBot=[0.616030,2.754841,0.048899]; %z=0.0489 in the .STL file
+% orient=60/180*pi;
+% xyzRefTop=[0.615305,2.753585,0.051412]; %z=0.051411 in the .STL file
+% xyzRefBot=[0.616030,2.754841,0.048899]; %z=0.0489 in the .STL file
+
+% orient=90 deg
+orient=90/180*pi;
+xyzRefTop=[0.615305,2.224459,0.051412]; %z=0.051411 in the .STL file
+xyzRefBot=[0.615305,2.225909,0.048899]; %z=0.0489 in the .STL file
 
 xyzTapTop=zeros(28,21);
 xyzTapBot=zeros(28,21);
