@@ -2,34 +2,34 @@ close all; clear; clc;
 %% inputs
 L=4.29895/30;
 twoL=0.286600; %exact in the .STL file
-tilt=-30/180*pi;
+tilt=30/180*pi;
 
 if tilt<0
-% orient=0 deg
-% orient=0/180*pi;
-% xyzRefTop=[0.613855,3.957359,0.051412];
-% xyzRefBot=[0.615305,3.957359,0.048899];
-
-% orient=30 deg
-% orient=30/180*pi;
-% xyzRefTop=[0.615305,3.387605,0.051412]; %z=0.051411 in the .STL file
-% xyzRefBot=[0.616561,3.388330,0.048899]; %z=0.0489 in the .STL file
-
-% orient=60 deg
-% orient=60/180*pi;
-% xyzRefTop=[0.615305,2.753585,0.051412]; %z=0.051411 in the .STL file
-% xyzRefBot=[0.616030,2.754841,0.048899]; %z=0.0489 in the .STL file
-
-% orient=90 deg
-orient=90/180*pi;
-xyzRefTop=[0.615305,2.224459,0.051412]; %z=0.051411 in the .STL file
-xyzRefBot=[0.615305,2.225909,0.048899]; %z=0.0489 in the .STL file
-
-else
     % orient=0 deg
     % orient=0/180*pi;
     % xyzRefTop=[0.613855,3.957359,0.051412];
     % xyzRefBot=[0.615305,3.957359,0.048899];
+
+    % orient=30 deg
+    % orient=30/180*pi;
+    % xyzRefTop=[0.615305,3.387605,0.051412]; %z=0.051411 in the .STL file
+    % xyzRefBot=[0.616561,3.388330,0.048899]; %z=0.0489 in the .STL file
+
+    % orient=60 deg
+    % orient=60/180*pi;
+    % xyzRefTop=[0.615305,2.753585,0.051412]; %z=0.051411 in the .STL file
+    % xyzRefBot=[0.616030,2.754841,0.048899]; %z=0.0489 in the .STL file
+
+    % orient=90 deg
+    orient=90/180*pi;
+    xyzRefTop=[0.615305,2.224459,0.051412]; %z=0.051411 in the .STL file
+    xyzRefBot=[0.615305,2.225909,0.048899]; %z=0.0489 in the .STL file
+
+else
+    % orient=0 deg
+    orient=0/180*pi;
+    xyzRefTop=[0.616755,3.957359,0.123062]; %z=0.123061 in the .STL file
+    xyzRefBot=[0.615305,3.957359,0.120549]; %z=0.12055 in the .STL file
 end
 
 %% calulate probe locations
