@@ -1,8 +1,10 @@
 close all; clear; clc;
+%% inputs
 L=4.29895/30;
 twoL=0.286600; %exact in the .STL file
-tilt=30/180*pi;
+tilt=-30/180*pi;
 
+if tilt<0
 % orient=0 deg
 % orient=0/180*pi;
 % xyzRefTop=[0.613855,3.957359,0.051412];
@@ -23,6 +25,14 @@ orient=90/180*pi;
 xyzRefTop=[0.615305,2.224459,0.051412]; %z=0.051411 in the .STL file
 xyzRefBot=[0.615305,2.225909,0.048899]; %z=0.0489 in the .STL file
 
+else
+    % orient=0 deg
+    % orient=0/180*pi;
+    % xyzRefTop=[0.613855,3.957359,0.051412];
+    % xyzRefBot=[0.615305,3.957359,0.048899];
+end
+
+%% calulate probe locations
 xyzTapTop=zeros(28,21);
 xyzTapBot=zeros(28,21);
 xyzNoTapTop=zeros(28,21);
@@ -49,7 +59,11 @@ zlabel('Z')
 axis equal
 
 %% write probe locations
+if tilt<0
 fileName=strcat('../RWDItestOF7Dir/RWDItestOF7Dir',num2str(orient/pi*180),'/motorBike/system/probes');
+else
+    fileName=strcat('../RWDItestOF7Dir/RWDItestOF7P30Dir',num2str(orient/pi*180),'/motorBike/system/probes');
+end
 fileID=fopen(fileName,'w');
 fprintf(fileID,'%14s\n','probeLocations');
 fprintf(fileID,'%1s\n','(');
@@ -124,7 +138,7 @@ if tapFlag==0
     dy=11.3*L-dy; %11.3*L=1.6192 in the geometry model
 end
 dx=dX*cos(tilt)+rowID*twoL;
-dz=dX*sin(tilt);
+dz=-dX*sin(tilt);
 dxRot=dx*cos(orient)+dy*sin(orient);
 dyRot=-(dy*cos(orient)-dx*sin(orient));
 xTap=xyzRef(1)+dxRot;
