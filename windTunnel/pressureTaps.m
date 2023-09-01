@@ -27,9 +27,14 @@ if tilt<0
 
 else
     % orient=0 deg
-    orient=0/180*pi;
-    xyzRefTop=[0.616755,3.957359,0.123062]; %z=0.123061 in the .STL file
-    xyzRefBot=[0.615305,3.957359,0.120549]; %z=0.12055 in the .STL file
+%     orient=0/180*pi;
+%     xyzRefTop=[0.616755,3.957359,0.123062]; %z=0.123061 in the .STL file
+%     xyzRefBot=[0.615305,3.957359,0.120549]; %z=0.12055 in the .STL file
+    
+    % orient=30 deg
+    orient=30/180*pi;
+    xyzRefTop=[0.616560,3.388693,0.123062]; %z=0.123061 in the .STL file
+    xyzRefBot=[0.615305,3.387968,0.120549]; %z=0.12055 in the .STL file
 end
 
 %% calulate probe locations
