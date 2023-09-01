@@ -32,9 +32,14 @@ else
 %     xyzRefBot=[0.615305,3.957359,0.120549]; %z=0.12055 in the .STL file
     
     % orient=30 deg
-    orient=30/180*pi;
-    xyzRefTop=[0.616560,3.388693,0.123062]; %z=0.123061 in the .STL file
-    xyzRefBot=[0.615305,3.387968,0.120549]; %z=0.12055 in the .STL file
+%     orient=30/180*pi;
+%     xyzRefTop=[0.616560,3.388693,0.123062]; %z=0.123061 in the .STL file
+%     xyzRefBot=[0.615305,3.387968,0.120549]; %z=0.12055 in the .STL file
+    
+    % orient=60 deg
+    orient=60/180*pi;
+    xyzRefTop=[0.616030,2.755468,0.123062]; %z=0.123061 in the .STL file
+    xyzRefBot=[0.615305,2.754213,0.120549]; %z=0.12055 in the .STL file
 end
 
 %% calulate probe locations
