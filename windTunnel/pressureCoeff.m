@@ -1,9 +1,11 @@
 close all; clear; clc;
-rowID=7;
-dir='30';
+% inputs
+tilt='p30';
+dir='0';
+rowID=1;
 
 %% wind tunnel data
-filename = '../../../RWDI/Wind Tunnel Data/tilt_n30deg.hdf5';
+filename = strcat('../../../RWDI/Wind Tunnel Data/tilt_',tilt,'deg.hdf5');
 % h5disp(filename);
 info = h5info(filename);
 level2 = info.Groups(1);
@@ -15,7 +17,7 @@ dtNorm = h5read(filename,strcat('/WindDir_',dir,'deg/dtNorm'));
 L=4.29895/30; %chord length
 U=9;          %wind speed
 dtCFD=0.002;  %output time step
-CFDname=strcat('./Data/Dir',dir,'MeshMore/pCopy');
+CFDname=strcat('./Data/',tilt,'Dir',dir,'MeshMore/pCopy');
 p = readtable(CFDname);
 timeCFD=p.Var1;
 timeCFD=timeCFD(1:7500); %remove data of the first 5s
@@ -51,7 +53,7 @@ CpRWDI=CpRWDI(length(CpRWDI)/2-7500/2+1:length(CpRWDI)/2+7500/2,:);
 for tapID=1:28
     CpRWDItap=CpRWDI(:,tapID);
     CpCFDtap=CpCFD(:,tapID);
-    comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID,dir)
+    comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID,dir,tilt)
 end
 meanTapsRWDI=mean(CpRWDI,1);
 meanTapsCFD=mean(CpCFD,1);
@@ -73,14 +75,14 @@ xlabel('Tap ID','FontSize',8,'FontName','Times New Roman')
 ylabel('Cp','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
 xlim([1 28])
-ylim([-0.2 2.2])
+%ylim([-0.2 2.2])
 xticks(1:3:28)
 % save figure
 figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 %mean for a table
@@ -88,7 +90,7 @@ meanTableRWDI=mean(CpRWDI,2);
 meanTableCFD=mean(CpCFD,2);
 stdTableRWDI=std(meanTableRWDI);
 stdTableCFD=std(meanTableCFD);
-comparePSD(dtRWDI,dtCFD,timeCFD,meanTableRWDI,meanTableCFD,999,rowID,dir)
+comparePSD(dtRWDI,dtCFD,timeCFD,meanTableRWDI,meanTableCFD,999,rowID,dir,tilt)
 
 for tapID=1:28
 CpRWDICFD=[CpRWDI(:,tapID);CpCFD(:,tapID)];
@@ -102,12 +104,12 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
 
 %% function for frequency analysis
-function comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID,dir)
+function comparePSD(dtRWDI,dtCFD,timeCFD,CpRWDItap,CpCFDtap,tapID,rowID,dir,tilt)
 nfftS=1024*16; % number of Fourier Points (resolution)
 %RWDI
 Fs=1/dtRWDI;
@@ -131,7 +133,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % Plotting PSD data on log-log axes (1 to 20 Hz)
@@ -150,7 +152,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % plot time series
@@ -169,6 +171,6 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
