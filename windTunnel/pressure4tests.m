@@ -1,10 +1,10 @@
 close all; clear; clc;
 % inputs
-tilt='n30';
-dir='0';
+tilt='p30';
+dir='60';
 rowID=1;
-tapIDlow=15;
-tapIDhigh=16;
+tapIDlow=14;
+tapIDhigh=13;
 
 %% wind tunnel data
 filename = strcat('../../../RWDI/Wind Tunnel Data/tilt_',tilt,'deg.hdf5');
@@ -27,7 +27,7 @@ plot(timeRWDI,CpRWDI(1:7500,tapIDlow))
 hold on
 plot(timeRWDI,CpRWDI(1:7500,tapIDhigh))
 xlim([0 15])
-legend({'Tap 15','Tap 16'},'FontSize',8,'FontName','Times New Roman')
+legend({'Tap low','Tap high'},'FontSize',8,'FontName','Times New Roman')
 xlabel('Time (s)','FontSize',8,'FontName','Times New Roman')
 ylabel('Pressure Coefficient','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
@@ -37,6 +37,7 @@ force=(CpRWDI(1:7500,tapIDlow)+CpRWDI(1:7500,tapIDhigh))/2;
 moment1=CpRWDI(1:7500,tapIDlow)-force;
 moment2=force-CpRWDI(1:7500,tapIDhigh);
 dist=moment1./force;
+mean(dist)
 
 figure
 subplot(3,1,1)
