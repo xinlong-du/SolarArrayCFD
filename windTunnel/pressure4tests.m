@@ -3,6 +3,8 @@ close all; clear; clc;
 tilt='n30';
 dir='0';
 rowID=1;
+tapIDlow=15;
+tapIDhigh=16;
 
 %% wind tunnel data
 filename = strcat('../../../RWDI/Wind Tunnel Data/tilt_',tilt,'deg.hdf5');
@@ -21,9 +23,9 @@ CpRWDI=CpRWDI(length(CpRWDI)/2-7500/2+1:length(CpRWDI)/2+7500/2,:);
 timeRWDI=dtRWDI:dtRWDI:dtRWDI*7500;
 
 hfig=figure;
-plot(timeRWDI,CpRWDI(1:7500,15))
+plot(timeRWDI,CpRWDI(1:7500,tapIDlow))
 hold on
-plot(timeRWDI,CpRWDI(1:7500,16))
+plot(timeRWDI,CpRWDI(1:7500,tapIDhigh))
 xlim([0 15])
 legend({'Tap 15','Tap 16'},'FontSize',8,'FontName','Times New Roman')
 xlabel('Time (s)','FontSize',8,'FontName','Times New Roman')
@@ -31,9 +33,9 @@ ylabel('Pressure Coefficient','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% plot force and moment
-force=(CpRWDI(1:7500,15)+CpRWDI(1:7500,16))/2;
-moment1=CpRWDI(1:7500,15)-force;
-moment2=force-CpRWDI(1:7500,16);
+force=(CpRWDI(1:7500,tapIDlow)+CpRWDI(1:7500,tapIDhigh))/2;
+moment1=CpRWDI(1:7500,tapIDlow)-force;
+moment2=force-CpRWDI(1:7500,tapIDhigh);
 dist=moment1./force;
 
 figure
