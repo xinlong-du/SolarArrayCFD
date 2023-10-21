@@ -1,6 +1,6 @@
 close all; clear; clc;
-p=readtable('./Data/pCopy');
-U=readtable('./Data/UCopy');
+p=readtable('./Data/Dir0MeshMore/pCopy');
+U=readtable('./Data/Dir0MeshMore/UCopy');
 Z_CFD=[0.1:0.1:0.9 0.98];
 
 L=4.29895/30;    %chord length
@@ -72,7 +72,7 @@ Y=log(IudIuref);
 alphaI=(X'*X)\(X'*Y);
 y=0:0.02:7;
 
-figure
+hfig=figure;
 plot(UdUref,ZdL,'bo','LineWidth',1)
 hold on
 plot((y/ZrefdL).^alphaU,y,'k','LineWidth',1)
@@ -84,14 +84,30 @@ ylabel('Z/L','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
 xlim([0.5,1.4])
 
-figure
+% save figure
+figWidth=3.5;
+figHeight=3;
+set(hfig,'PaperUnits','inches');
+set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
+fileout='./Data/Dir0MeshMore/verifyInflow/inflowMean.';
+print(hfig,[fileout,'tif'],'-r300','-dtiff');
+
+hfig=figure;
 plot(IuRWDI,ZdL,'bo','LineWidth',1)
 hold on
 plot(Iuref*(y/ZrefdL).^alphaI,y,'k','LineWidth',1)
 plot(IxCFD,Z_CFD/L,'r--','LineWidth',1)
-legend({'Measured Iu','Iuref*(Z/Zref)^{-0.2254}','CFD'},'FontSize',8,'FontName','Times New Roman')
-legend('Location','Northeast')
+legend({'Measured','0.1848*(Z/Zref)^{-0.2254}','CFD'},'FontSize',8,'FontName','Times New Roman')
+legend('Location','Southwest')
 xlabel('Iu','FontSize',8,'FontName','Times New Roman')
 ylabel('Z/L','FontSize',8,'FontName','Times New Roman')
 set(gca,'FontSize',8,'FontName','Times New Roman')
 xlim([0.0,0.25])
+
+% save figure
+figWidth=3.5;
+figHeight=3;
+set(hfig,'PaperUnits','inches');
+set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
+fileout='./Data/Dir0MeshMore/verifyInflow/inflowIu.';
+print(hfig,[fileout,'tif'],'-r300','-dtiff');
