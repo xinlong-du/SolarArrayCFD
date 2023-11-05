@@ -94,7 +94,7 @@ zLw=0.32*xLu;
 
 %% output L, R, U, and points for inlet
 nPoints=183;
-Z=0.984488/nPoints:0.984488/nPoints:0.984488;
+Z=0.738366/nPoints:0.738366/nPoints:0.738366;
 Z=Z';
 
 %U
@@ -151,9 +151,9 @@ fileID=fopen('../RWDItestOF7/motorBike/constant/boundaryData/inlet/points','w');
 fprintf(fileID,'%1s\n','(');
 for i = 1:nPoints*2
     if i<=nPoints
-        fprintf(fileID,'%1s%8.6f %8.6f %8.6f%1s\n','(',0.0,-4.0,Z(i),')');
+        fprintf(fileID,'%1s%8.6f %8.6f %8.6f%1s\n','(',0.0,2.0,Z(i),')');
     else
-        fprintf(fileID,'%1s%8.6f %8.6f %8.6f%1s\n','(',0.0,4.0,Z(i-nPoints),')');
+        fprintf(fileID,'%1s%8.6f %8.6f %8.6f%1s\n','(',0.0,4.295518,Z(i-nPoints),')');
     end
 end
 fprintf(fileID,'%1s',')');
