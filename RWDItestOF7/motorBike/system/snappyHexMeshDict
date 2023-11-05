@@ -127,12 +127,12 @@ castellatedMeshControls
         motorBike
         {
             // Surface-wise min and max refinement level
-            level (4 4);
+            level (8 8);
         }
     }
 
     // Resolve sharp angles
-    resolveFeatureAngle 60;
+    resolveFeatureAngle 30;
 
 
     // Region-wise refinement
@@ -165,7 +165,7 @@ castellatedMeshControls
         refinementBoxSmall
         {
             mode inside;
-            levels ((1E15 3));
+            levels ((1E15 5));
         }
     }
 
@@ -178,7 +178,7 @@ castellatedMeshControls
     // section reachable from the locationInMesh is kept.
     // NOTE: This point should never be on a face, always inside a cell, even
     // after refinement.
-    locationInMesh (3.0001 3.0001 0.43);
+    locationInMesh (0.2 1.2 0.43);
 
 
     // Whether any faceZones (as specified in the refinementSurfaces)
@@ -251,7 +251,7 @@ addLayersControls
 
     // When not to extrude surface. 0 is flat surface, 90 is when two faces
     // are perpendicular
-    featureAngle 175;
+    featureAngle 200;
 
     // Maximum number of snapping relaxation iterations. Should stop
     // before upon reaching a correct mesh.
