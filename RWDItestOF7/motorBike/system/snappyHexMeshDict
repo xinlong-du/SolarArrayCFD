@@ -38,22 +38,22 @@ geometry
     refinementBoxLarge
     {
         type searchableBox;
-        min (0.246122 1.968976 -0.1);
-        max (2.826739 4.326542  0.492244);
+        min (0.0      1.722854 -0.1);
+        max (3.072861 4.572664  0.738366);
     }
 
     refinementBoxMedium
     {
         type searchableBox;
-        min (0.492244 2.215098 -0.1);
-        max (2.580617 4.08042   0.246122);
+        min (0.246122 1.968976 -0.1);
+        max (2.826739 4.326542  0.492244);
     }
 
     refinementBoxSmall
     {
         type searchableBox;
-        min (0.5537745 2.2766285 -0.1);
-        max (2.519087  4.01889    0.184592);
+        min (0.492244 2.215098 -0.1);
+        max (2.580617 4.08042   0.246122);
     }
 };
 
