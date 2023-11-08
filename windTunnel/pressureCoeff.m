@@ -1,8 +1,8 @@
 close all; clear; clc;
 % inputs
-tilt='p30';
+tilt='n30';
 dir='0';
-rowID=1;
+rowID=7;
 
 %% wind tunnel data
 filename = strcat('../../../RWDI/Wind Tunnel Data/tilt_',tilt,'deg.hdf5');
@@ -17,7 +17,7 @@ dtNorm = h5read(filename,strcat('/WindDir_',dir,'deg/dtNorm'));
 L=4.29895/30; %chord length
 U=9;          %wind speed
 dtCFD=0.002;  %output time step
-CFDname=strcat('./Data/',tilt,'Dir',dir,'MeshMore/pCopy');
+CFDname=strcat('./Data/',tilt,'Dir',dir,'MeshNew/pCopy');
 p = readtable(CFDname);
 timeCFD=p.Var1;
 timeCFD=timeCFD(1:7500); %remove data of the first 5s
@@ -82,7 +82,7 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshNew\Scale30Row',num2str(rowID),'\0scale30row',num2str(rowID),'meanStdTaps.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 %mean for a table
@@ -104,7 +104,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshNew\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'boxplotTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end
 
@@ -133,7 +133,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshNew\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSDtap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % Plotting PSD data on log-log axes (1 to 20 Hz)
@@ -152,7 +152,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshNew\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'PSD1to20Hztap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 % plot time series
@@ -171,6 +171,6 @@ figWidth=6;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshMore\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
+fileout=strcat('.\Data\',tilt,'Dir',dir,'MeshNew\Scale30Row',num2str(rowID),'\scale30row',num2str(rowID),'timeSeriesTap',num2str(tapID),'.');
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 end

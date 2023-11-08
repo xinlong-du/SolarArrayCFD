@@ -1,7 +1,7 @@
 close all; clear; clc;
-p=readtable('./Data/Dir0MeshMore/pCopy');
-U=readtable('./Data/Dir0MeshMore/UCopy');
-Z_CFD=[0.1:0.1:0.9 0.98];
+p=readtable('./Data/n30Dir0MeshNew/pCopy');
+U=readtable('./Data/n30Dir0MeshNew/UCopy');
+Z_CFD=[0.1:0.1:0.7 0.71 0.72 0.738];
 
 L=4.29895/30;    %chord length
 ZrefdL=0.7;
@@ -89,7 +89,7 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout='./Data/Dir0MeshMore/verifyInflow/inflowMean.';
+fileout='./Data/n30Dir0MeshNew/verifyInflow/inflowMean.';
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
 
 hfig=figure;
@@ -109,5 +109,5 @@ figWidth=3.5;
 figHeight=3;
 set(hfig,'PaperUnits','inches');
 set(hfig,'PaperPosition',[0 0 figWidth figHeight]);
-fileout='./Data/Dir0MeshMore/verifyInflow/inflowIu.';
+fileout='./Data/n30Dir0MeshNew/verifyInflow/inflowIu.';
 print(hfig,[fileout,'tif'],'-r300','-dtiff');
