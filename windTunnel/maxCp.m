@@ -2,6 +2,7 @@ close all; clear; clc;
 
 maxiCp=zeros(8,1);
 maxiCpMean=zeros(8,3);
+maxiCpMeanTaps=zeros(8,4);
 % inputs
 tilt={'n30','p30'};
 dir={'0','30','60','90'};
@@ -26,9 +27,19 @@ for i=1:2
         CpRWDI = CpRWDI';
         dtNorm = h5read(filename,strcat('/WindDir_',dir{j},'deg/dtNorm'));
         
+        CpTopRow1=CpRWDI(:,[9 10 13 14 17 18 21 22]);
+        CpTopRow2=CpRWDI(:,[13 14 17 18]);
+        CpBotRow1=CpRWDI(:,[11 12 15 16 19 20 23 24]);
+        CpBotRow2=CpRWDI(:,[15 16 19 20]);
+        CpMeanTopRow1=mean(CpTopRow1,2);
+        CpMeanTopRow2=mean(CpTopRow2,2);
+        CpMeanBotRow1=mean(CpBotRow1,2);
+        CpMeanBotRow2=mean(CpBotRow2,2);
         maxiCp(k)=max(max(abs(CpRWDI)));
         CpMean=mean(CpRWDI,2);
         maxiCpMean(k,1)=max(abs(CpMean));
+        maxiCpMeanTaps(k,:)=[max(abs(CpMeanTopRow1)),max(abs(CpMeanTopRow2)),...
+            max(abs(CpMeanBotRow1)),max(abs(CpMeanBotRow2))];
         
         dt=dtNorm*L/U;
         dura=dt*length(CpMean);
